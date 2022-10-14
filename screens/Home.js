@@ -124,7 +124,8 @@ const colorsToday = colors[day.getDay()];
       color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       style: {
-        borderRadius: 15
+        borderRadius: 16
+        
       },
       propsForDots: {
         r: "6",
