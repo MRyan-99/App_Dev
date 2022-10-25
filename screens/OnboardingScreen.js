@@ -46,7 +46,6 @@ const OnboardingScreen = ({setFirstLaunch}) =>{
               subtitle: (
                 <View>
                   <Text style={{fontWeight:'bold', textAlign:'center', color:'#A0CE4E', fontSize:19, margin:12,  marginTop: -10}}>We value your privacy, please enter your phone so we can track your balance</Text>
-                  <TextInput placeholder='Phone Number'/></TextInput> */}
                 </View>
               ),
             },
