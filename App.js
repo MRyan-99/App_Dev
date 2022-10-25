@@ -16,6 +16,7 @@ const App = () =>{
   const [isFirstLaunch, setFirstLaunch] = React.useState(true);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
+  const [phoneNumber, setPhoneNumber] = React.useState("")
 
    if (isFirstLaunch == true){
 return(
@@ -28,15 +29,17 @@ return(
 else{
   return(<View>
     <TextInput style={styles.input}
-    placeholderTextColor='#00FF00'
-    placeholder='Phone Number'>
+    placeholderTextColor='#0000FF'
+    placeholder='Phone Number'
+    value ={phoneNumber}
+    onChangeText={setPhoneNumber}>  
     </TextInput>
     <Button
     title='Send'
       style={styles.button}
       onPress={async()=>{
-        console.log('Button was pressed')
-        await fetch('https://dev.stedi.me/twofactorlogin/5098230079',
+        console.log('As you wish, my liege')
+        await fetch('https://dev.stedi.me/twofactorlogin/' +phoneNumber,
         {
          method:'POST', 
          headers:{
