@@ -18,7 +18,7 @@ const App = () =>{
   const [loggedInState, setLoggedInState] = React.useState(loggedInStates.NOT_LOGGED_IN);
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
   const [phoneNumber, setPhoneNumber] = React.useState("");
-  const [oneTimePassword, setOneTimePassword] = React.useState(null);
+  const [oneTimePassword, setOneTimePassword] = React.useState("");
 
 
    if (isFirstLaunch == true){
@@ -35,7 +35,8 @@ else if(loggedInState == loggedInStates.NOT_LOGGED_IN){
     placeholderTextColor='#0000FF'
     placeholder='Phone Number'
     value ={phoneNumber}
-    onChangeText={setPhoneNumber}>  
+    onChangeText={setPhoneNumber}
+    keyboardType ="numeric">  
     </TextInput>
     <Button
     title='Send'
@@ -82,26 +83,41 @@ else if(loggedInState == loggedInStates.CODE_SENT){
     placeholderTextColor='#0000FF'
     placeholder='Code'
     value={oneTimePassword}
-    onChangeText={setOneTimePassword}>
+    onChangeText={setOneTimePassword}
+    keyboardType ="numeric">
     </TextInput>
     <Button
     title='Confirm'
     style={styles.button}
     onPress={async()=>{
+      await fetch(
+        "https://dev.stedi.me/twofactorlogin",
+        {
+          method:'POST',
+          headers:{
+            'content-type':'application/text'
+          }
+          //body:{}
+          })
+      
+    
+    
+      
       if(oneTimePassword == ""){
         alert('You did not give me the password, you must now ask again!')
-        console.log('sending this dolt back to the phone number screed')
+        console.log('sending this dolt back to ask for a password')
         setLoggedInState(loggedInStates.NOT_LOGGED_IN)
       }
-      
-      }}>      
-    </Button>
-  </View>
-  )
-}
-}
+              else{
+        setLoggedInState(loggedInState.LOGGED_IN)
+      }
+      }
+    }
+          
+    />
+  </View>)}}
 
- export default App;
+export default App;
 
 const styles = StyleSheet.create({
   container:{
