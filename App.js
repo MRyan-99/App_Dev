@@ -38,7 +38,14 @@ else{
     title='Send'
       style={styles.button}
       onPress={async()=>{
-        console.log('As you wish, my liege')
+
+        if(phoneNumber == ""){
+          alert('You have no power here without a phone number!')
+          console.log('this fool did not enter a phone number')
+        }
+        else{
+          console.log('As you wish, my liege')
+          alert("as you wish")
         await fetch('https://dev.stedi.me/twofactorlogin/' +phoneNumber,
         {
          method:'POST', 
@@ -46,7 +53,10 @@ else{
           'content-type':'application/text'
          }
         } )
-      }}
+      }
+      
+    }
+  }
       />
       </View>)
 
