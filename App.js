@@ -116,8 +116,14 @@ else if(loggedInState == loggedInStates.CODE_SENT){
       //11/1/22 code below in class, make sure it is a .status request
       else if(loginResponse.status==200){
         Alert.alert('Success!', 'You are now logged in')
+        console.log('this fool has finally been able to log in correctly')
         setLoggedInState(loggedInStates.LOGGED_IN)
 
+      }
+      else{
+        Alert.alert('Failure!','Your password does not match')
+        console.log('this dolt thought they could sneak by without the correct password!')
+        setLoggedInState(logged)
       }
       }
     }
