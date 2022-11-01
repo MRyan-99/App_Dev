@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage, TextInput, Button, Alert } from 'react-native';
 import  Navigation from './components/Navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingScreen from './screens/OnboardingScreen';
@@ -26,7 +26,7 @@ return(
   <OnboardingScreen setFirstLaunch={setFirstLaunch}/>
  
 );
-  }else if(loggedInStates == loggedInStates.LOGGED_IN){
+  }else if(loggedInState == loggedInStates.LOGGED_IN){
     return <Navigation/>
   }
 else if(loggedInState == loggedInStates.NOT_LOGGED_IN){
@@ -44,20 +44,20 @@ else if(loggedInState == loggedInStates.NOT_LOGGED_IN){
       onPress={async()=>{
         
         if(phoneNumber == ""){
-          alert('You have no power here without a phone number!')
+          Alert.alert('Failure!','You have no power here without a phone number!')
           console.log('this fool did not enter a phone number!')
         }
         else if(phoneNumber.length < 10){
-          alert('I am sorry, but your input needs to be a little longer, I cannot understand gibberish!')
+          Alert.alert('Failure','I am sorry, but your input needs to be a little longer, I cannot understand gibberish!')
           console.log('This dolt thinks they can get away with too short of a number!')
         }
         else if(phoneNumber.length > 10){
-          alert('I am sorry, but your input needs to be a little shorter, I cannot understand gibberish!')
+          Alert.alert('Failure!','I am sorry, but your input needs to be a little shorter, I cannot understand gibberish!')
           console.log('This dope seems to think too much information is ok!')
         }
         else{
           console.log('As you wish, my liege.')
-          alert("as you wish.")
+          Alert.alert("Success",'As you wish.')
         await fetch('https://dev.stedi.me/twofactorlogin/' +phoneNumber,
         {
          method:'POST', 
@@ -90,26 +90,34 @@ else if(loggedInState == loggedInStates.CODE_SENT){
     title='Confirm'
     style={styles.button}
     onPress={async()=>{
-      await fetch(
+      const loginResponse=await fetch(
         "https://dev.stedi.me/twofactorlogin",
         {
           method:'POST',
           headers:{
             'content-type':'application/text'
-          }
-          //body:{}
+          },
+          //11/1/22 code body in class
+         body:JSON.stringify({
+           phoneNumber,
+           oneTimePassword
+
+         })
           })
       
     
     
       
       if(oneTimePassword == ""){
-        alert('You did not give me the password, you must now ask again!')
+        Alert.alert('Failure!','You did not give me the password, you must now ask again!')
         console.log('sending this dolt back to ask for a password')
         setLoggedInState(loggedInStates.NOT_LOGGED_IN)
       }
-              else{
-        setLoggedInState(loggedInState.LOGGED_IN)
+      //11/1/22 code below in class, make sure it is a .status request
+      else if(loginResponse.status==200){
+        Alert.alert('Success!', 'You are now logged in')
+        setLoggedInState(loggedInStates.LOGGED_IN)
+
       }
       }
     }
