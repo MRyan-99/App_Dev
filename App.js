@@ -90,6 +90,7 @@ else if(loggedInState == loggedInStates.CODE_SENT){
     title='Confirm'
     style={styles.button}
     onPress={async()=>{
+      console.log('login request was made')
       const loginResponse=await fetch(
         "https://dev.stedi.me/twofactorlogin",
         {
@@ -101,12 +102,8 @@ else if(loggedInState == loggedInStates.CODE_SENT){
          body:JSON.stringify({
            phoneNumber,
            oneTimePassword
-
          })
-          })
-      
-    
-    
+          })      
       
       if(oneTimePassword == ""){
         Alert.alert('Failure!','You did not give me the password, you must now ask again!')
@@ -122,8 +119,8 @@ else if(loggedInState == loggedInStates.CODE_SENT){
       }
       else{
         Alert.alert('Failure!','Your password does not match')
-        console.log('this dolt thought they could sneak by without the correct password!')
-        setLoggedInState(logged)
+        console.log('this doofus thought they could sneak by without the correct password!')
+        setLoggedInState(loggedInStates.NOT_LOGGED_IN)
       }
       }
     }
