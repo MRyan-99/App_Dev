@@ -1,10 +1,11 @@
 import React, { useEffect, useState, } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Button, Alert } from 'react-native';
 import  Navigation from './components/Navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingScreen from './screens/OnboardingScreen';
 import Home from './screens/Home';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AppStack = createNativeStackNavigator();
 const loggedInStates={
@@ -18,7 +19,7 @@ const App = () =>{
   const [loggedInState, setLoggedInState] = React.useState(loggedInStates.NOT_LOGGED_IN);
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
   const [phoneNumber, setPhoneNumber] = React.useState("");
-  const [oneTimePassword, setOneTimePassword] = React.useState("");
+  const [oneTimePassword, setOneTimePassword] = React.useState(null);
 
 
    if (isFirstLaunch == true){
@@ -33,7 +34,7 @@ else if(loggedInState == loggedInStates.NOT_LOGGED_IN){
   return(<View>
     <TextInput style={styles.input}
     placeholderTextColor='#0000FF'
-    placeholder='Phone Number'
+    placeholder='10-digit phone number'
     value ={phoneNumber}
     onChangeText={setPhoneNumber}
     keyboardType ="numeric">  
@@ -45,7 +46,7 @@ else if(loggedInState == loggedInStates.NOT_LOGGED_IN){
         
         if(phoneNumber == ""){
           Alert.alert('Failure!','You have no power here without a phone number!')
-          console.log('this fool did not enter a phone number!')
+          console.log('This fool did not enter a phone number!')
         }
         else if(phoneNumber.length < 10){
           Alert.alert('Failure','I am sorry, but your input needs to be a little longer, I cannot understand gibberish!')
@@ -57,7 +58,7 @@ else if(loggedInState == loggedInStates.NOT_LOGGED_IN){
         }
         else{
           console.log('As you wish, my liege.')
-          Alert.alert("Success",'As you wish.')
+          Alert.alert("Success!",'As you wish.')
         await fetch('https://dev.stedi.me/twofactorlogin/' +phoneNumber,
         {
          method:'POST', 
@@ -107,19 +108,21 @@ else if(loggedInState == loggedInStates.CODE_SENT){
       
       if(oneTimePassword == ""){
         Alert.alert('Failure!','You did not give me the password, you must now ask again!')
-        console.log('sending this dolt back to ask for a password')
+        console.log('Sending this dolt back to ask for a password')
         setLoggedInState(loggedInStates.NOT_LOGGED_IN)
       }
       //11/1/22 code below in class, make sure it is a .status request
       else if(loginResponse.status==200){
         Alert.alert('Success!', 'You are now logged in')
-        console.log('this fool has finally been able to log in correctly')
+        console.log('This wizard has finally been able to log in correctly')
+        console.log('Phone Number', phoneNumber)
+        console.log('Onetime Password', oneTimePassword)
         setLoggedInState(loggedInStates.LOGGED_IN)
 
       }
       else{
         Alert.alert('Failure!','Your password does not match')
-        console.log('this doofus thought they could sneak by without the correct password!')
+        console.log('This doofus thought they could sneak by without the correct password!')
         setLoggedInState(loggedInStates.NOT_LOGGED_IN)
       }
       }
