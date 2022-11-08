@@ -118,6 +118,9 @@ else if(loggedInState == loggedInStates.CODE_SENT){
         console.log('Phone Number', phoneNumber)
         console.log('Onetime Password', oneTimePassword)
         setLoggedInState(loggedInStates.LOGGED_IN)
+        const sessionToken=await loginResponse.toLocaleString()
+        console.log('Session Token', sessionToken)
+        await AsyncStorage.settings('sessionToken', sessionToken)
 
       }
       else{
