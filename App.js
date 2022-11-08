@@ -21,6 +21,28 @@ const App = () =>{
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [oneTimePassword, setOneTimePassword] = React.useState(null);
 
+  useEffect(()=>{
+    const getSessionToken = async()=>{
+      const sessionToken = await AsyncStorage.getItem('sessionToken')
+      console.log('retrieving ID', sessionToken)
+      const validateResponse = await fetch('https://dev.stedi.me/validate/' +sessionToken,
+      {
+        method:'GET',
+        headers: {
+          'content-type' : 'application/text'
+        }
+      })
+      if(validateResponse.status==200){
+        const userName = await validateResponse.text()
+        console.log('Logged in')
+        await AsyncStorage.setItem('userName', userName)
+        setLoggedInState(loggedInStates.LOGGED_IN)
+      }
+
+    }
+    getSessionToken();
+  })
+
 
    if (isFirstLaunch == true){
 return(
@@ -118,13 +140,13 @@ else if(loggedInState == loggedInStates.CODE_SENT){
         console.log('Phone Number', phoneNumber)
         console.log('Onetime Password', oneTimePassword)
         setLoggedInState(loggedInStates.LOGGED_IN)
-        const sessionToken=await loginResponse.toLocaleString()
+        const sessionToken=await loginResponse.text()
         console.log('Session Token', sessionToken)
-        await AsyncStorage.settings('sessionToken', sessionToken)
+        await AsyncStorage.setItem('sessionToken', sessionToken)
 
       }
       else{
-        Alert.alert('Failure!','Your password does not match')
+        Alert.alert('Failure!','Your password does not match' , )
         console.log('This doofus thought they could sneak by without the correct password!')
         setLoggedInState(loggedInStates.NOT_LOGGED_IN)
       }
