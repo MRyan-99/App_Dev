@@ -36,6 +36,7 @@ const App = () =>{
         const userName = await validateResponse.text()
         console.log('Logged in')
         await AsyncStorage.setItem('userName', userName)
+        console.log('User Name', userName)
         setLoggedInState(loggedInStates.LOGGED_IN)
       }
 
