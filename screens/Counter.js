@@ -133,7 +133,7 @@ console.log("score:",scoreObject.score);
 setScore(scoreObject.score);
 props.setHomeTodayScore(scoreObject.score);
 }catch(error){
-  console.log('error', error);
+  console.log('Error', error);
  }
 }
 
