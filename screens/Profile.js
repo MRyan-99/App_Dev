@@ -118,6 +118,8 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
+    marginTop:70,
+    marginBottom:70,
   },
   buttonContainer: {
     flex: 1,

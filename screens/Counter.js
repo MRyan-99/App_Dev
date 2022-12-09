@@ -10,6 +10,7 @@ import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage, button
 import exerciseImg from '../image/exercise2.png';
 import ProgressBar from 'react-native-progress/Bar';
 import { FontAwesome5 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { Ionicons} from 'react-native-vector-icons';
 // import { Button } from 'react-native-elements';
 // import { IconButton } from 'react-native-paper';
@@ -18,10 +19,21 @@ import { FontAwesome5 } from '@expo/vector-icons';
 export default function Counter(props) {
  const [completionCount, setCompletionCount] = useState(0);
  const [counter, setCounter] = useState(3); //(180 3 mins)
- const [score, setScore] = useState(0);
+ const [score, setScore] = useState("");
 
  const [currentScreen, setCurrentScreen] = useState('counter');
-useEffect(()=>{
+
+ useEffect(()=>{
+  const getUserName = async ()=>{
+    userName.current= await AsyncStorage.getItem('userName');
+    console.log('Counter userName',userName.current);    
+    token.current = await AsyncStorage.getItem('sessionToken');
+   console.log('counter token:' ,token.current);
+  };
+  getUserName();
+},[]);
+
+ useEffect(()=>{
   if (currentScreen == 'counter'){
     if (completionCount == 1){
      setCurrentScreen('break');
@@ -111,7 +123,7 @@ totalSteps:30
 })
   }
  catch(error){
-  console.log('error', error);
+  console.log('failure', error);
  }
 }
 
@@ -120,8 +132,7 @@ totalSteps:30
 const getResults = async () =>{
 
 try{
-  userName.current = userName
-  const scoreResponse = await fetch('https://dev.stedi.me/riskscore/' +userName,{
+  const scoreResponse = await fetch('https://dev.stedi.me/riskscore/' +userName.current,{
   method:'GET',
   headers:{
     'Content-Type': 'application/json',
@@ -131,7 +142,7 @@ try{
 const scoreObject = await scoreResponse.json();
 console.log("score:",scoreObject.score);
 setScore(scoreObject.score);
-props.setHomeTodayScore(scoreObject.score);
+//props.setHomeTodayScore(scoreObject.score);
 }catch(error){
   console.log('Error', error);
  }
